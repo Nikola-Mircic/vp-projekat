@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -63,6 +64,13 @@ namespace Common
         public EegSample()
         {
             Timestamp = DateTime.Now;
+        }
+
+        public override string ToString()
+        {
+            return $"{Timestamp:HH:mm:ss},{AF3},{T7},{Pz},{T8},{AF4},"+
+                    $"{Attention},{Engagement},{Excitement},{Interest},{Relaxation},{Stress},"+
+                    $"{Battery},{ContactQuality},{SlideIndex},{SetIndex},{RowIndex}";
         }
     }
 }

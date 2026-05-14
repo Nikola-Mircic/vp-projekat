@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,12 +11,12 @@ namespace Common
     public interface IService
     {
         [OperationContract]
-        ServiceResponse StartSession(EegMeta meta);
+        bool StartSession(EegMeta meta);
 
         [OperationContract]
-        ServiceResponse PushSample(EegSample sample);
+        bool PushSample(EegSample sample);
 
         [OperationContract]
-        ServiceResponse EndSession();
+        bool EndSession();
     }
 }
