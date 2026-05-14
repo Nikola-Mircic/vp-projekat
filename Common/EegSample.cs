@@ -66,11 +66,9 @@ namespace Common
             Timestamp = DateTime.Now;
         }
 
-        public override string ToString()
+        public string ToCsv()
         {
-            return $"{Timestamp:HH:mm:ss},{AF3},{T7},{Pz},{T8},{AF4},"+
-                    $"{Attention},{Engagement},{Excitement},{Interest},{Relaxation},{Stress},"+
-                    $"{Battery},{ContactQuality},{SlideIndex},{SetIndex},{RowIndex}";
+            return $"{Timestamp:O},{AF3},{T7},{Pz},{T8},{AF4},{Attention},{Engagement},{Excitement},{Interest},{Relaxation},{Stress},{Battery},{ContactQuality},{SlideIndex},{SetIndex},{RowIndex}";
         }
     }
 }

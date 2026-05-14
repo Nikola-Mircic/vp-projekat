@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Server.Domain
 {
-    public interface IValidator <T>
+    public interface IValidator <V, R>
     {
-        bool Check(T value);
+        ValidationResult<R> Check(V value);
     }
 }
