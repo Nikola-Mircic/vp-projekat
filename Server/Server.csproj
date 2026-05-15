@@ -44,10 +44,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\FileSessionStorage.cs" />
+    <Compile Include="Domain\Events\EegEvents.cs" />
+    <Compile Include="Domain\Events\LowBatteryWarning.cs" />
+    <Compile Include="Domain\Events\PoorContactWarning..cs" />
+    <Compile Include="Domain\Events\RelaxationDrop.cs" />
+    <Compile Include="Domain\Events\StressSpike.cs" />
+    <Compile Include="Domain\Events\TimeSkewWarning..cs" />
     <Compile Include="Domain\ISessionStorage.cs" />
     <Compile Include="Domain\IValidator.cs" />
+    <Compile Include="Domain\Events\Warning.cs" />
+    <Compile Include="Domain\ValidationResult.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validators\BatteryValidator.cs" />
+    <Compile Include="Validators\ContactValidator.cs" />
+    <Compile Include="Validators\RelaxationValidator.cs" />
+    <Compile Include="Validators\StressSpikeValidator.cs" />
+    <Compile Include="Validators\TimeSkewValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -58,8 +71,6 @@
       <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Validators\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

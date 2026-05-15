@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Server.Domain
 {
-    internal class Events
+    public class EegEvents
     {
         // Define events for session management and data reception
         public event Action<string> OnTransferStarted;
