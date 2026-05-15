@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Faults;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -14,6 +15,8 @@ namespace Common
         bool StartSession(EegMeta meta);
 
         [OperationContract]
+        [FaultContract(typeof(DataFormatFault))]
+        [FaultContract(typeof(ValidationFault))]
         bool PushSample(string sample);
 
         [OperationContract]

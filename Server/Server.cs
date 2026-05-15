@@ -27,7 +27,8 @@ namespace Server
         StressSpikeValidator stressSpikeValidator;
         TimeSkewValidator timeSkewValidator;
 
-        public Server() {
+        public Server()
+        {
             sessionStorage = new FileSessionStorage();
 
             InitializeValidators();
@@ -43,13 +44,29 @@ namespace Server
 
         public bool PushSample(string sample)
         {
-            EegSample eegSample = ValidateFormat(sample);
-
-            ValidateSample(eegSample);
+            EegSample eegSample;
+            
+            try {
+                eegSample = ValidateFormat(sample);
+            }
+            catch (Exception ex)
+            {
+                throw CreateDataFormatFault(ex.Message);
+            }
 
             EegEvents.RaiseSampleReceived(eegSample);
 
-            return sessionStorage.PushSample(eegSample);
+            string validationMessage = ValidateSample(eegSample);
+
+            if(validationMessage == "")
+            {
+                return sessionStorage.PushSample(eegSample);
+            }
+            else
+            {
+                EegEvents.RaiseWarning(new Warning(validationMessage, eegSample));
+                throw CreateValidationFault(validationMessage);
+            }
         }
 
         public bool StartSession(EegMeta meta)
@@ -64,51 +81,31 @@ namespace Server
 
         private EegSample ValidateFormat(string sample)
         {
-            try
-            {
-                ValidationResult<EegSample> result = dataFormatValidator.Check(sample);
-                return result.Value;
-            }
-            catch (Exception ex)
-            {
-                throw new FaultException<DataFormatFault>(
-                     new DataFormatFault() { Message = ex.Message }
-                    );
-            }
+            ValidationResult<EegSample> result = dataFormatValidator.Check(sample);
+            return result.Value;
         }
 
-        private void ValidateSample(EegSample sample)
+        private string ValidateSample(EegSample sample)
         {
+            if (!batteryValidator.Check(sample.Battery).Valid)
+                return "Battery level too low";
 
-            if(!batteryValidator.Check(sample.Battery).Valid)
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault() { Message = "Battery level too low" }
-                );
+            if (!contactValidator.Check(sample.ContactQuality).Valid)
+                return "Contact quality too low";
 
-            if(!contactValidator.Check(sample.ContactQuality).Valid)
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault() { Message = "Contact quality too low" }
-                );
+            if (!relaxationValidator.Check(sample.Relaxation).Valid)
+                return "Relaxation level dropped too much";
 
-            if(!relaxationValidator.Check(sample.Relaxation).Valid)
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault() { Message = "Relaxation level dropped too much" }
-                );
+            if (!rowIndexValidator.Check(sample.RowIndex).Valid)
+                return "Row index out of order";
 
-            if(!rowIndexValidator.Check(sample.RowIndex).Valid)
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault() { Message = "Row index is not sequential" }
-                );
+            if (!stressSpikeValidator.Check(sample.Stress).Valid)
+                return "Stress spike detected";
 
-            if(!stressSpikeValidator.Check(sample.Stress).Valid)
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault() { Message = "Stress level spiked too much" }
-                );
+            if (!timeSkewValidator.Check(sample.Timestamp).Valid)
+                return "Timestamp skew detected";
 
-            if(!timeSkewValidator.Check(sample.Timestamp).Valid)
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault() { Message = "Timestamp skew is too high" }
-                );
+            return "";
         }
 
         private void InitializeValidators()
@@ -125,7 +122,7 @@ namespace Server
         private void InitializeEventHandlers()
         {
             EegEvents.OnTransferStarted += (participantId) => Console.WriteLine($"Session started for participant: {participantId}");
-            EegEvents.OnSampleReceived += (sample) => Console.WriteLine($"Sample received: {sample}");
+            EegEvents.OnSampleReceived += (sample) => Console.WriteLine($"Sample received: {sample.ToCsv()}");
             EegEvents.OnTransferCompleted += (participantId) => Console.WriteLine($"Session completed for participant: {participantId}");
 
             EegEvents.OnWarningRaised += (warning) =>
@@ -134,6 +131,22 @@ namespace Server
                     sessionStorage.PushWarning(warning);
                 Console.WriteLine($"Warning raised: {warning.Message}");
             };
+        }
+
+        private FaultException<ValidationFault> CreateValidationFault(string message)
+        {
+            return new FaultException<ValidationFault>(
+                    new ValidationFault() { Message = message },
+                    new FaultReason(message)
+                );
+        }
+
+        private FaultException<DataFormatFault> CreateDataFormatFault(string message)
+        {
+            return new FaultException<DataFormatFault>(
+                    new DataFormatFault() { Message = message },
+                    new FaultReason(message)
+                );
         }
     }
 }

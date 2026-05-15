@@ -30,7 +30,7 @@ namespace Server.Data
         {
             try
             {
-                writer.WriteLine(sample.ToString());
+                writer.WriteLine(sample.ToCsv());
                 return true;
             }
             catch (Exception e)

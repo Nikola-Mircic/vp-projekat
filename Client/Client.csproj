@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{643C98FE-BA89-4290-B572-78E053633261}</ProjectGuid>
+    <ProjectGuid>{E12D3061-B6BC-41D9-B473-096C87661EE2}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Server</RootNamespace>
-    <AssemblyName>Server</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <RootNamespace>Client</RootNamespace>
+    <AssemblyName>Client</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -34,7 +34,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
@@ -45,29 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\AppConfig.cs" />
-    <Compile Include="Data\FileSessionStorage.cs" />
-    <Compile Include="Domain\Events\EegEvents.cs" />
-    <Compile Include="Domain\Events\LowBatteryWarning.cs" />
-    <Compile Include="Domain\Events\PoorContactWarning..cs" />
-    <Compile Include="Domain\Events\RelaxationDrop.cs" />
-    <Compile Include="Domain\Events\StressSpike.cs" />
-    <Compile Include="Domain\Events\TimeSkewWarning..cs" />
-    <Compile Include="Domain\ISessionStorage.cs" />
-    <Compile Include="Domain\IValidator.cs" />
-    <Compile Include="Domain\Events\Warning.cs" />
-    <Compile Include="Domain\ValidationResult.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Server.cs" />
-    <Compile Include="Util\EegSampleParser.cs" />
-    <Compile Include="Validators\BatteryValidator.cs" />
-    <Compile Include="Validators\ContactValidator.cs" />
-    <Compile Include="Validators\DataFormatValidator.cs" />
-    <Compile Include="Validators\RelaxationValidator.cs" />
-    <Compile Include="Validators\RowIndexValidator.cs" />
-    <Compile Include="Validators\StressSpikeValidator.cs" />
-    <Compile Include="Validators\TimeSkewValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -78,10 +56,5 @@
       <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
 </Project>

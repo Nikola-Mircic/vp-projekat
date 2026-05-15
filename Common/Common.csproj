@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="EegMeta.cs" />
     <Compile Include="EegSample.cs" />
+    <Compile Include="Faults\DataFormatFault.cs" />
+    <Compile Include="Faults\ValidationFault.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
