@@ -14,7 +14,7 @@ namespace Common
         bool StartSession(EegMeta meta);
 
         [OperationContract]
-        bool PushSample(EegSample sample);
+        bool PushSample(string sample);
 
         [OperationContract]
         bool EndSession();

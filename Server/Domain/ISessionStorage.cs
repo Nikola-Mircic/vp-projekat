@@ -10,6 +10,11 @@ namespace Server.Domain
     internal interface ISessionStorage : IDisposable
     {
         bool StartSession(EegMeta meta);
+
         bool PushSample(EegSample sample);
+
+        bool PushWarning(Warning warning);
+
+        bool EndSession();
     }
 }

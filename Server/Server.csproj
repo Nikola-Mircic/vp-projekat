@@ -58,6 +58,7 @@
     <Compile Include="Domain\ValidationResult.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server.cs" />
     <Compile Include="Validators\BatteryValidator.cs" />
     <Compile Include="Validators\ContactValidator.cs" />
     <Compile Include="Validators\RelaxationValidator.cs" />

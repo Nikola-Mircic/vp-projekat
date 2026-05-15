@@ -11,11 +11,7 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(AppConfig.BatteryLowThreshold);
-            Console.WriteLine(AppConfig.ContactQualityMin);
-            Console.WriteLine(AppConfig.StressSpikeThreshold);
-            Console.WriteLine(AppConfig.RelaxationDropThreshold);
-            Console.WriteLine(AppConfig.TimestampSkewMaxMs);
+            
         }
     }
 }
