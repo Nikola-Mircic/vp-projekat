@@ -1,4 +1,5 @@
 ﻿using Common.Faults;
+using Common.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +13,14 @@ namespace Common
     public interface IService
     {
         [OperationContract]
-        bool StartSession(EegMeta meta);
+        ServiceResponse StartSession(EegMeta meta);
 
         [OperationContract]
         [FaultContract(typeof(DataFormatFault))]
         [FaultContract(typeof(ValidationFault))]
-        bool PushSample(string sample);
+        ServiceResponse PushSample(string sample);
 
         [OperationContract]
-        bool EndSession();
+        ServiceResponse EndSession();
     }
 }

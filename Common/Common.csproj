@@ -49,6 +49,9 @@
     <Compile Include="Faults\ValidationFault.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Response\Acknowledgement.cs" />
+    <Compile Include="Response\ServiceResponse.cs" />
+    <Compile Include="Response\Status.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

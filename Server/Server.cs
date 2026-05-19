@@ -1,5 +1,6 @@
 ﻿using Common;
 using Common.Faults;
+using Common.Response;
 using Server.Config;
 using Server.Data;
 using Server.Domain;
@@ -35,14 +36,19 @@ namespace Server
             InitializeEventHandlers();
         }
 
-        public bool EndSession()
+        public ServiceResponse EndSession()
         {
             EegEvents.RaiseTransferCompleted(sessionMetadata.ParticipantId);
             sessionStorage.EndSession();
-            return true;
+
+            return new ServiceResponse()
+            {
+                Acknowledgement = Acknowledgement.ACK,
+                Status = Status.COMPLETED
+            };
         }
 
-        public bool PushSample(string sample)
+        public ServiceResponse PushSample(string sample)
         {
             EegSample eegSample;
             
@@ -58,9 +64,26 @@ namespace Server
 
             string validationMessage = ValidateSample(eegSample);
 
-            if(validationMessage == "")
+            if (validationMessage == "")
             {
-                return sessionStorage.PushSample(eegSample);
+                bool result = sessionStorage.PushSample(eegSample);
+
+                if (result)
+                {
+                    return new ServiceResponse()
+                    {
+                        Acknowledgement = Acknowledgement.ACK,
+                        Status = eegSample.RowIndex == sessionMetadata.TotalRows ? Status.COMPLETED : Status.IN_PROGRESS
+                    };
+                }
+                else
+                {
+                    return new ServiceResponse()
+                    {
+                        Acknowledgement = Acknowledgement.NACK,
+                        Status = eegSample.RowIndex == sessionMetadata.TotalRows ? Status.COMPLETED : Status.IN_PROGRESS
+                    };
+                }
             }
             else
             {
@@ -69,14 +92,18 @@ namespace Server
             }
         }
 
-        public bool StartSession(EegMeta meta)
+        public ServiceResponse StartSession(EegMeta meta)
         {
             this.sessionMetadata = meta;
             sessionStorage.StartSession(meta);
 
             EegEvents.RaiseTransferStarted(meta.ParticipantId);
 
-            return true;
+            return new ServiceResponse()
+            {
+                Acknowledgement = Acknowledgement.ACK,
+                Status = Status.COMPLETED
+            };
         }
 
         private EegSample ValidateFormat(string sample)

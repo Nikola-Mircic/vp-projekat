@@ -1,5 +1,6 @@
 ﻿using Common;
 using Common.Faults;
+using Common.Response;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,7 +40,8 @@ namespace Client
                 line = reader.ReadLine();
                 try
                 {
-                    if (!proxy.PushSample($"{line},{i + 1}"))
+                    ServiceResponse response = proxy.PushSample($"{line},{i + 1}");
+                    if (response.Acknowledgement != Acknowledgement.ACK)
                     {
                         Console.WriteLine("Failed to push sample, aborting.");
                         break;
