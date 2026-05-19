@@ -26,6 +26,11 @@ namespace Server.Data
             }
         }
 
+        ~FileSessionStorage() 
+        {
+            Dispose();
+        }
+
         public bool PushSample(EegSample sample)
         {
             try

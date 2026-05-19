@@ -36,6 +36,20 @@ namespace Server
             InitializeEventHandlers();
         }
 
+        public ServiceResponse StartSession(EegMeta meta)
+        {
+            this.sessionMetadata = meta;
+            sessionStorage.StartSession(meta);
+
+            EegEvents.RaiseTransferStarted(meta.ParticipantId);
+
+            return new ServiceResponse()
+            {
+                Acknowledgement = Acknowledgement.ACK,
+                Status = Status.COMPLETED
+            };
+        }
+
         public ServiceResponse EndSession()
         {
             EegEvents.RaiseTransferCompleted(sessionMetadata.ParticipantId);
@@ -90,20 +104,6 @@ namespace Server
                 EegEvents.RaiseWarning(new Warning(validationMessage, eegSample));
                 throw CreateValidationFault(validationMessage);
             }
-        }
-
-        public ServiceResponse StartSession(EegMeta meta)
-        {
-            this.sessionMetadata = meta;
-            sessionStorage.StartSession(meta);
-
-            EegEvents.RaiseTransferStarted(meta.ParticipantId);
-
-            return new ServiceResponse()
-            {
-                Acknowledgement = Acknowledgement.ACK,
-                Status = Status.COMPLETED
-            };
         }
 
         private EegSample ValidateFormat(string sample)
